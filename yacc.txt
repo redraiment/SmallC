@@ -1,0 +1,100 @@
+statement := <define-function-statement>
+           | <block>
+           | <single>
+
+define-function-statement := function <ID> <block-statement>
+
+block := <block-statement> [on locking <IDs>] ;
+       | <block-statement> [on locking <IDs>] .
+
+block-statement := { <statements> }
+
+statements := <statement> [<statements>]
+            | <EMPTY>
+
+single := <single-statement> [on locking [<IDs>,] <ID>] ;
+        | <single-statement> [on locking [<IDs>,] <ID>] .
+
+single-statement := <if-statement>
+                  | <for-statement>
+                  | <while-statement>
+                  | <do-statement>
+                  | <return-statement>
+                  | <expression>
+
+if-statement := if ( <expression> ) <block-statement>
+                [[elsif <block-statement>]
+                else <block-statement>]
+
+for-statement := for ( <expression> ; <expression> ; <expression> ) <block>
+
+while-statement := while ( <expression> ) <block>
+
+do-statement := do <block> while ( <expression> )
+
+return-statement := return <expression>
+
+expressions := [<expressions>,] <expression>
+             | <EMPTY>
+
+expression := <variable> = <level5value>
+            | <variable> *= <level5value>
+            | <variable> /= <level5value>
+            | <variable> %= <level5value>
+            | <variable> += <level5value>
+            | <variable> -= <level5value>
+            | <level5value>
+
+level5value := <level5value> && <level4value>
+             | <level5value> || <level4value>
+             | <level4value>
+
+level4value := <level4value> == <level3value>
+             | <level4value> != <level3value>
+             | <level4value> >= <level3value>
+             | <level4value> <= <level3value>
+             | <level4value> > <level3value>
+             | <level4value> < <level3value>
+             | <level3value>
+
+level3value := <level3value> + <level2value>
+             | <level3value> - <level2value>
+             | <level2value>
+
+level2value := <level2value> * <level1value>
+             | <level2value> / <level1value>
+             | <level2value> % <level1value>
+             | <level1value>
+
+level1value := ++<variable>
+             | --<variable>
+             | <variable>++
+             | <variable>--
+             | -<factor>
+             | +<factor>
+             | !<factor>
+             | <factor>
+
+factor := <string>
+        | <digit>
+        | <call-function-statement>
+        | <variable>
+        | ( <expression> )
+
+string := /"[^\"]*(\.[^\"]*)*"/
+
+digit := /\d+/
+
+call-function-statement := <ID> ( <expressions> )
+
+variable := <ID>
+          | <array>
+
+array := <ID> [ <expression> ]
+
+IDs := [<IDs>,] <ID>
+     | <EMPTY>
+
+ID := /[a-zA-Z]\w+/
+
+EMPTY :=

@@ -1,4 +1,4 @@
-﻿package rr.scr.lexical;
+package rr.scr.lexical;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
